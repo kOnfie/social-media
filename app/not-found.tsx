@@ -33,7 +33,7 @@ export default function NotFound() {
           You may have entered an invalid address or the page has been deleted.
         </p>
 
-        <CustomButton asChild variant="default" className="w-full">
+        <CustomButton asChild className="w-full py-3 px-10">
           <Link href={"/"}>Main page.</Link>
         </CustomButton>
       </div>
