@@ -1,4 +1,5 @@
-import { AuthForm } from "@/components/AuthForm";
+import { SignInForm } from "@/features/auth/components/SignInForm";
+
 import { Container } from "@/components/Container";
 
 export default function SigninPage() {
@@ -10,7 +11,7 @@ export default function SigninPage() {
         <p className="text-[var(--color-text-secondary)] text-[14px]">Sign in to your account</p>
       </div>
 
-      <AuthForm variant="signin" />
+      <SignInForm />
     </Container>
   );
 }

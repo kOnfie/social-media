@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/client/utils";
 import { Container } from "./Container";
 
 interface StatisticsProps {
