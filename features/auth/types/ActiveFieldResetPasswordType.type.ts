@@ -1,1 +1,4 @@
-export type ActiveFieldResetPasswordType = "confirmPassword" | "password" | null;
+export type ActiveFieldResetPasswordType =
+  | "confirmPassword"
+  | "password"
+  | null;

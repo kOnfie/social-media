@@ -1,9 +1,11 @@
 "use client";
-import { Header } from "@/components/Header";
+
+import { useRouter } from "next/navigation";
 
 import { Search } from "lucide-react";
-import { ArrowBack } from "@/components/ui/ArrowBack";
-import { useRouter } from "next/navigation";
+
+import { Header } from "@/shared/components/Header";
+import { ArrowBack } from "@/shared/components/ui/ArrowBack";
 
 export default function NotificationHeader() {
   const router = useRouter();

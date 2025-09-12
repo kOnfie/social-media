@@ -1,7 +1,9 @@
 import cn from "classnames";
 import { Container } from "lucide-react";
-import { FOLLOWERS } from "../constants/followerList.const";
+
 import { FollowButton } from "@/components/ui/FollowButton";
+
+import { FOLLOWERS } from "../constants/followerList.const";
 
 interface FollowerListProps {
   className?: string;
@@ -19,7 +21,9 @@ export function FollowerList({ className }: FollowerListProps) {
             <div className="w-[50px] h-[50px] rounded-[50%] bg-black" />
             <div>
               <p className="text-[14px]">{follower.name}</p>
-              <p className="text-[12px] text-[var(--color-text-secondary)]">{follower.username}</p>
+              <p className="text-[12px] text-[var(--color-text-secondary)]">
+                {follower.username}
+              </p>
             </div>
           </div>
 

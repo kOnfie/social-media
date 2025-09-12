@@ -1,32 +1,42 @@
+import { useState } from "react";
+
 import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
+
+import { AuthFormSchemaData } from "../schemas/AuthFormSchema";
 import { submitAuthFormApi } from "../services/submitAuthForm.api";
 
-export function useSubmitAuthForm(variant: "signin" | "signup") {
+export function useSubmitAuthForm(variant: "signin" | "signup"): {
+  error: null | string;
+  isLoading: boolean;
+  submitAuthForm: (data: AuthFormSchemaData) => void;
+} {
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  async function submitAuthForm(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function submitAuthForm(data: AuthFormSchemaData) {
+    setError(null);
+    setIsLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const { email, password } = data;
 
     try {
       const res = await submitAuthFormApi({ email, password }, variant);
+      const data = await res.json();
 
       if (!res.ok) {
-        throw new Error("Server error");
+        throw new Error(data.message);
       }
 
-      const data = await res.json();
       localStorage.setItem("user", JSON.stringify(data.user));
-
       router.push("/auth/otp-verify");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submit form:", error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
-  return { submitAuthForm };
+  return { error, isLoading, submitAuthForm };
 }

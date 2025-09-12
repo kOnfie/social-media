@@ -1,31 +1,67 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Facebook } from "lucide-react";
+import { useForm } from "react-hook-form";
+
 import { cn } from "@/lib/client/utils";
-
-import { CustomButton } from "@/components/ui/CustomButton";
-import { SeparatorWithText } from "@/components/ui/SeparatorWithText";
-
 import googleIcon from "@/public/icons/google-icon.svg";
+import { CustomButton } from "@/shared/components/ui/CustomButton";
+import { LoadingOverlay } from "@/shared/components/ui/LoadingOverlay";
+import { SeparatorWithText } from "@/shared/components/ui/SeparatorWithText";
 
+import { AUTH_FORM_FIELDS } from "../constants/authFormFields.consts";
 import { useSubmitAuthForm } from "../hooks/useSubmitAuthForm";
-import { AuthFormFields } from "./ui/AuthFormFields";
+import { AuthFormSchema, AuthFormSchemaData } from "../schemas/AuthFormSchema";
+import { FormErrorMessage } from "./ui/FormErrorMessage";
+import { FormFields } from "./ui/FormFields";
 
-interface SignInFormProps {
+interface SigninFormProps {
   className?: string;
 }
 
-export function SignInForm({ className }: SignInFormProps) {
-  const { submitAuthForm } = useSubmitAuthForm("signin");
+export function SigninForm({ className }: SigninFormProps) {
+  const {
+    error: submitAuthFormError,
+    isLoading,
+    submitAuthForm,
+  } = useSubmitAuthForm("signin");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<AuthFormSchemaData>({ resolver: zodResolver(AuthFormSchema) });
 
   return (
-    <form className={cn(className, "grid")} onSubmit={submitAuthForm}>
-      <AuthFormFields />
+    <form
+      className={cn(className, "grid")}
+      onSubmit={handleSubmit(submitAuthForm)}
+    >
+      <LoadingOverlay
+        isVisible={isSubmitting || isLoading}
+        text="Submitting your data..."
+      />
 
-      <Link href={"/auth/forgot-password"} className="text-primary underline text-[12px]  flex">
+      {submitAuthFormError && (
+        <FormErrorMessage className="text-[20px] uppercase mb-3">
+          {submitAuthFormError}
+        </FormErrorMessage>
+      )}
+
+      <FormFields<AuthFormSchemaData>
+        fields={AUTH_FORM_FIELDS}
+        register={register}
+        errors={errors}
+      />
+
+      <Link
+        href={"/auth/forgot-password"}
+        className="text-primary underline text-[12px] text-left block w-fit"
+      >
         Forgot your password?
       </Link>
 

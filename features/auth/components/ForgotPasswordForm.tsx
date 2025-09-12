@@ -1,41 +1,73 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { cn } from "@/lib/client/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { CustomButton } from "@/components/ui/CustomButton";
+import { CustomButton } from "@/shared/components/ui/CustomButton";
+import { LoadingOverlay } from "@/shared/components/ui/LoadingOverlay";
 
-interface ForgotPasswordFormProps {
-  handleOnSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
-}
+import { FORGOT_PASSWORD_FORM_FIELDS } from "../constants/forgotPasswordFormFields.consts";
+import { useForgotPassword } from "../hooks/useForgotPassword";
+import {
+  ForgotPasswordFormSchema,
+  ForgotPasswordFormSchemaData,
+} from "../schemas/ForgotPasswordFormSchema";
+import { FormErrorMessage } from "./ui/FormErrorMessage";
+import { FormFields } from "./ui/FormFields";
 
-export function ForgotPasswordForm({ handleOnSubmit }: ForgotPasswordFormProps) {
-  const [activeField, setActiveField] = useState<boolean>(false);
+export function ForgotPasswordForm() {
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<ForgotPasswordFormSchemaData>({
+    resolver: zodResolver(ForgotPasswordFormSchema),
+  });
+
+  const {
+    error: submitForgotPasswordError,
+    isLoading,
+    submitForgotPasswordForm,
+  } = useForgotPassword();
+
+  async function handleSubmitForgotPasswordForm(
+    data: ForgotPasswordFormSchemaData,
+  ) {
+    console.log("submitForgotPasswordError:", submitForgotPasswordError);
+    await submitForgotPasswordForm(data);
+
+    if (!submitForgotPasswordError) {
+      router.push(`/auth/reset-password?email=${data.email}`);
+    }
+  }
 
   return (
-    <form onSubmit={handleOnSubmit}>
-      <div
-        className={cn(
-          "grid border border-[var(--color-border-light)] border-solid py-[13px] px-[18px] rounded-[10px] h-[69px] transition-all mb-[18px]",
-          activeField && "border-primary"
-        )}
-      >
-        <label className={cn("text-primary mb-[3px] text-[12px]", !activeField && "hidden")} htmlFor="email">
-          Enter your email
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="Enter your email address"
-          className="focus:outline-none text-[14px]"
-          onFocus={() => setActiveField(true)}
-          onBlur={() => setActiveField(false)}
-        />
-      </div>
+    <form onSubmit={handleSubmit(handleSubmitForgotPasswordForm)}>
+      <LoadingOverlay
+        isVisible={isSubmitting || isLoading}
+        text="Submitting your data..."
+      />
 
-      <CustomButton className="py-[20px] absolute bottom-[32px] left-[25px] right-[25px]" type="submit">
+      {submitForgotPasswordError && (
+        <FormErrorMessage className="mb-[30px] uppercase">
+          {submitForgotPasswordError}
+        </FormErrorMessage>
+      )}
+
+      <FormFields<ForgotPasswordFormSchemaData>
+        fields={FORGOT_PASSWORD_FORM_FIELDS}
+        register={register}
+        errors={errors}
+      />
+
+      <CustomButton
+        className="py-[20px] absolute bottom-[32px] left-[25px] right-[25px]"
+        type="submit"
+      >
         Send Reset Link
       </CustomButton>
     </form>

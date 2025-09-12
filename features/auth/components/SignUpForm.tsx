@@ -1,32 +1,62 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Facebook } from "lucide-react";
+import { useForm } from "react-hook-form";
+
 import { cn } from "@/lib/client/utils";
-
-import { CustomButton } from "@/components/ui/CustomButton";
-import { SeparatorWithText } from "@/components/ui/SeparatorWithText";
-
 import googleIcon from "@/public/icons/google-icon.svg";
+import { CustomButton } from "@/shared/components/ui/CustomButton";
+import { LoadingOverlay } from "@/shared/components/ui/LoadingOverlay";
+import { SeparatorWithText } from "@/shared/components/ui/SeparatorWithText";
 
+import { AUTH_FORM_FIELDS } from "../constants/authFormFields.consts";
 import { useSubmitAuthForm } from "../hooks/useSubmitAuthForm";
-import { AuthFormFields } from "./ui/AuthFormFields";
+import { AuthFormSchema, AuthFormSchemaData } from "../schemas/AuthFormSchema";
+import { FormErrorMessage } from "./ui/FormErrorMessage";
+import { FormFields } from "./ui/FormFields";
 
-interface SignUpFormProps {
+interface SignupFormProps {
   className?: string;
 }
 
-export function SignUpForm({ className }: SignUpFormProps) {
-  const { submitAuthForm } = useSubmitAuthForm("signup");
+export function SignupForm({ className }: SignupFormProps) {
+  const {
+    error: submitAuthFormError,
+    isLoading,
+    submitAuthForm,
+  } = useSubmitAuthForm("signup");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<AuthFormSchemaData>({ resolver: zodResolver(AuthFormSchema) });
 
   return (
-    <form className={cn(className, "grid")} onSubmit={submitAuthForm}>
-      <AuthFormFields />
+    <form
+      className={cn(className, "grid")}
+      onSubmit={handleSubmit(submitAuthForm)}
+    >
+      <LoadingOverlay
+        isVisible={isSubmitting || isLoading}
+        text="Submitting your data..."
+      />
+      {submitAuthFormError && (
+        <FormErrorMessage>{submitAuthFormError}</FormErrorMessage>
+      )}
+
+      <FormFields<AuthFormSchemaData>
+        fields={AUTH_FORM_FIELDS}
+        register={register}
+        errors={errors}
+      />
 
       <CustomButton className="py-[18.5px] mb-[27px] mt-[54px]" type="submit">
-        Sign in
+        Sign up
       </CustomButton>
 
       <SeparatorWithText className="mb-[14px]">

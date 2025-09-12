@@ -1,6 +1,7 @@
-import { CustomButton } from "@/components/ui/CustomButton";
 import { Metadata } from "next";
 import Link from "next/link";
+
+import { CustomButton } from "@/shared/components/ui/CustomButton";
 
 export const metadata: Metadata = {
   title: "Not found",
@@ -23,18 +24,28 @@ export default function NotFound() {
             strokeWidth={2}
             viewBox="0 0 24 24"
           >
-            <path d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </div>
-        <h1 className="text-3xl font-bold text-primary mb-2" style={{ color: "var(--color-primary)" }}>
+        <h1
+          className="text-3xl font-bold text-primary mb-2"
+          style={{ color: "var(--color-primary)" }}
+        >
           Page not found
         </h1>
-        <p className="text-md text-text-secondary mb-6" style={{ color: "var(--color-text-secondary)" }}>
+        <p
+          className="text-md text-text-secondary mb-6"
+          style={{ color: "var(--color-text-secondary)" }}
+        >
           You may have entered an invalid address or the page has been deleted.
         </p>
 
         <CustomButton asChild className="w-full py-3 px-10">
-          <Link href={"/"}>Main page.</Link>
+          <Link href={"/menu"}>Main page</Link>
         </CustomButton>
       </div>
     </div>

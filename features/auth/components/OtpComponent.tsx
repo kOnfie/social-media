@@ -1,11 +1,14 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { useOTP } from "@/features/auth/hooks/useOTP";
+import { CustomButton } from "@/shared/components/ui/CustomButton";
+import { LoadingOverlay } from "@/shared/components/ui/LoadingOverlay";
 
-import { OtpInput } from "./ui/OtpInput";
 import { useSubmitOtpCode } from "../hooks/useSubmitOtpCode";
-
-import { CustomButton } from "@/components/ui/CustomButton";
+import { FormErrorMessage } from "./ui/FormErrorMessage";
+import { OtpInput } from "./ui/OtpInput";
 
 interface OtpComponentProps {
   otpLength?: number;
@@ -13,20 +16,40 @@ interface OtpComponentProps {
 }
 
 const OTP_DIGIT_LENGTH = 6;
-const AUTO_SUBMIT_DELAY = 750;
-const AUTO_COMPLETE = true;
 
-export function OtpComponent({ otpLength = OTP_DIGIT_LENGTH, autoSubmitDelay = AUTO_SUBMIT_DELAY }: OtpComponentProps) {
-  const { refArr, inputArr, handleInputChange, handleInputKeyDown, handleInputPaste, handleSubmitOtpCode } = useOTP(
-    otpLength,
-    autoSubmitDelay,
-    AUTO_COMPLETE
-  );
+export function OtpComponent({
+  otpLength = OTP_DIGIT_LENGTH,
+}: OtpComponentProps) {
+  const router = useRouter();
+  const {
+    refArr,
+    inputArr,
+    handleInputChange,
+    handleInputKeyDown,
+    handleInputPaste,
+  } = useOTP(otpLength);
 
-  const { submitOtpCodeWithButton } = useSubmitOtpCode(handleSubmitOtpCode, inputArr.join(""));
+  const {
+    error: submitOtpCodeError,
+    isLoading,
+    submitOtp,
+  } = useSubmitOtpCode(inputArr.join(""));
+
+  async function handleSubmitOtp() {
+    try {
+      const data = await submitOtp();
+
+      localStorage.setItem("user", JSON.stringify(data.user));
+      router.push("/menu");
+    } catch (error) {
+      console.error("OTP submission failed:", error);
+    }
+  }
 
   return (
     <div>
+      <LoadingOverlay isVisible={isLoading} text={"Verifying your code..."} />
+
       <OtpInput
         otpLength={otpLength}
         inputArr={inputArr}
@@ -36,11 +59,18 @@ export function OtpComponent({ otpLength = OTP_DIGIT_LENGTH, autoSubmitDelay = A
         handlePaste={handleInputPaste}
       />
 
+      {submitOtpCodeError && (
+        <FormErrorMessage className="mt-3">
+          {submitOtpCodeError}
+        </FormErrorMessage>
+      )}
+
       <CustomButton
-        onClick={submitOtpCodeWithButton}
+        onClick={handleSubmitOtp}
         className="py-[20px] absolute bottom-[32px] left-[25px] right-[25px]"
+        disabled={isLoading}
       >
-        Verify OTP
+        {isLoading ? "Loading..." : "Verify OTP"}
       </CustomButton>
     </div>
   );

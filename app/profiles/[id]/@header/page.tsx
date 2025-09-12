@@ -1,9 +1,11 @@
 "use client";
 
-import { Header } from "@/components/Header";
-import { ArrowBack } from "@/components/ui/ArrowBack";
-import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+import { Heart } from "lucide-react";
+
+import { Header } from "@/shared/components/Header";
+import { ArrowBack } from "@/shared/components/ui/ArrowBack";
 
 export default function ProfileHeader() {
   const router = useRouter();

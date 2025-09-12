@@ -7,6 +7,5 @@ export async function getUserByEmail(email: string) {
   if (res.rowCount === null || res.rowCount === 0) {
     return null;
   }
-
   return res.rows[0];
 }

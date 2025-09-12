@@ -1,4 +1,4 @@
-import { CustomButton } from "@/components/ui/CustomButton";
+import { CustomButton } from "./CustomButton";
 import { MoveLeft } from "lucide-react";
 
 interface ArrowBackProps {

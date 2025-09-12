@@ -1,16 +1,32 @@
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export function useSubmitOtpCode(handleSubmitOtpCode: (code: string, email: string) => Promise<any>, code: string) {
-  const router = useRouter();
+import { submitOtpCode } from "../services/submitOtpCode.api";
 
-  async function submitOtpCodeWithButton() {
+export function useSubmitOtpCode(code: string) {
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  async function submitOtp() {
+    setError(null);
+    setIsLoading(true);
     const user = JSON.parse(localStorage.getItem("user") as string);
 
-    const data = await handleSubmitOtpCode(code, user.email);
+    try {
+      const res = await submitOtpCode(code, user.email);
+      const data = await res.json();
 
-    localStorage.setItem("user", JSON.stringify(data.user));
-    router.push("/menu");
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
+
+      return data;
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  return { submitOtpCodeWithButton };
+  return { error, isLoading, submitOtp };
 }

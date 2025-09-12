@@ -1,41 +1,36 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 
-import { useRouter } from "next/navigation";
+import { ResetPasswordFormData } from "../schemas/ResetPasswordFormSchema";
 import { resetPasswordApi } from "../services/resetPassword.api";
 
 export function useResetPassword(email: string | null, code: string) {
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function submitResetPasswordForm(e: FormEvent<HTMLFormElement>): Promise<void> {
-    e.preventDefault();
+  async function submitResetPasswordForm(
+    data: ResetPasswordFormData,
+  ): Promise<any> {
+    setIsLoading(true);
     setError(null);
 
-    const formData = new FormData(e.currentTarget);
-
-    const password = formData.get("password") as string;
-    const confirmPassword = formData.get("confirmPassword");
-
-    if (password !== confirmPassword) {
-      setError("Passwords are not equals.");
-      return;
-    }
+    const { password } = data;
 
     try {
       const res = await resetPasswordApi({ email, password, code });
+      const data = await res.json();
 
       if (!res.ok) {
-        throw new Error("Failed to reset password");
+        throw new Error(data.message);
       }
 
-      const data = await res.json();
-      localStorage.setItem("user", JSON.stringify(data.user));
-      router.push(`/menu`);
+      return data;
     } catch (error) {
       console.error("Error sending reset password request:", error);
-      setError("Error sending reset password request. Try again later please.");
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
-  return { error, submitResetPasswordForm };
+  return { error, isLoading, submitResetPasswordForm };
 }

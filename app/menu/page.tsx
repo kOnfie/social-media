@@ -1,12 +1,13 @@
-import { Header } from "@/components/Header";
 import Image from "next/image";
+import Link from "next/link";
+
+import { ChevronRight } from "lucide-react";
 
 import avatar from "@/public/image/avatar.jpg";
-import { CustomButton } from "@/components/ui/CustomButton";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
-import { Container } from "@/components/Container";
-import { Statistics } from "@/components/Statistic";
+import { Container } from "@/shared/components/Container";
+import { Header } from "@/shared/components/Header";
+import { Statistics } from "@/shared/components/Statistic";
+import { CustomButton } from "@/shared/components/ui/CustomButton";
 
 const STATISTICS = [
   {
@@ -56,9 +57,15 @@ export default function MenuPage() {
       <Header variant="profile">
         <Image src={avatar.src} alt="Avatar" width={45} height={45} />
         <p className="font-medium mb-[2px]">Morsalin Nur</p>
-        <p className="text-[12px] text-[var(--color-text-secondary)]">@morsalin.nur</p>
+        <p className="text-[12px] text-[var(--color-text-secondary)]">
+          @morsalin.nur
+        </p>
 
-        <CustomButton asChild variant="outline" className="grid place-content-center w-[36px] h-[36px] rounded-[50%]">
+        <CustomButton
+          asChild
+          variant="outline"
+          className="grid place-content-center w-[36px] h-[36px] rounded-[50%]"
+        >
           <Link href={"/profiles/1"}>
             <ChevronRight size={18} color="#919191" />
           </Link>
@@ -73,10 +80,18 @@ export default function MenuPage() {
           <Container className="border-b border-[var(--color-border-light)] pb-[26px] mb-[33px]">
             <div className="grid gap-[27px]">
               {LINKS.map((link) => (
-                <Link key={link.id} href={link.href} className="flex justify-between items-center">
+                <Link
+                  key={link.id}
+                  href={link.href}
+                  className="flex justify-between items-center"
+                >
                   <div>
-                    <h6 className="text-[15px] font-medium mb-[4px]">{link.title}</h6>
-                    <p className="text-[12px] text-[var(--color-text-secondary)]">{link.subtitle}</p>
+                    <h6 className="text-[15px] font-medium mb-[4px]">
+                      {link.title}
+                    </h6>
+                    <p className="text-[12px] text-[var(--color-text-secondary)]">
+                      {link.subtitle}
+                    </p>
                   </div>
 
                   <CustomButton
@@ -94,10 +109,17 @@ export default function MenuPage() {
           </Container>
 
           <Container>
-            <Link href={"/privacy"} className="flex justify-between items-center">
+            <Link
+              href={"/privacy"}
+              className="flex justify-between items-center"
+            >
               <div>
-                <h6 className="text-[15px] font-medium mb-[4px]">Privacy Policy</h6>
-                <p className="text-[12px] text-[var(--color-text-secondary)]">Protect your privacy</p>
+                <h6 className="text-[15px] font-medium mb-[4px]">
+                  Privacy Policy
+                </h6>
+                <p className="text-[12px] text-[var(--color-text-secondary)]">
+                  Protect your privacy
+                </p>
               </div>
 
               <CustomButton
@@ -112,7 +134,10 @@ export default function MenuPage() {
             </Link>
           </Container>
 
-          <CustomButton className="absolute bottom-[32px] left-[25px] right-[25px] py-[18.5px]" variant="ghost">
+          <CustomButton
+            className="absolute bottom-[32px] left-[25px] right-[25px] py-[18.5px]"
+            variant="ghost"
+          >
             Log out
           </CustomButton>
         </section>

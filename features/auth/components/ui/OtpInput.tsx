@@ -6,7 +6,10 @@ interface OtpInputProps {
   otpLength: number;
 
   handleOnChange: (input: string, index: number) => void;
-  handleEnterKeyDown: (e: KeyboardEvent<HTMLInputElement>, index: number) => void;
+  handleEnterKeyDown: (
+    e: KeyboardEvent<HTMLInputElement>,
+    index: number,
+  ) => void;
   handlePaste: (e: ClipboardEvent<HTMLInputElement>) => void;
 }
 
@@ -34,8 +37,12 @@ export function OtpInput({
           className=" w-[45px] h-[45px] bg-transparent text-[20px] dark:bg-input/30 border border-[var(--color-border-light)] border-solid rounded-[10px] transition-all focus:outline-primary px-[13px]"
           type="text"
           value={val}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => handleOnChange(e.target.value, idx)}
-          onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => handleEnterKeyDown(e, idx)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            handleOnChange(e.target.value, idx)
+          }
+          onKeyDown={(e: KeyboardEvent<HTMLInputElement>) =>
+            handleEnterKeyDown(e, idx)
+          }
           onPaste={(e: ClipboardEvent<HTMLInputElement>) => handlePaste(e)}
         />
       ))}

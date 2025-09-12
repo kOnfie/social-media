@@ -1,69 +1,75 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-import { cn } from "@/lib/client/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { CustomButton } from "@/components/ui/CustomButton";
+import { useResetPassword } from "@/features/auth/hooks/useResetPassword";
+import { CustomButton } from "@/shared/components/ui/CustomButton";
+import { LoadingOverlay } from "@/shared/components/ui/LoadingOverlay";
 
-import { ActiveFieldResetPasswordType } from "../types/ActiveFieldResetPasswordType.type";
+import { RESET_PASSWORD_FORM_FIELDS } from "../constants/resetPasswordFormFields.consts";
+import {
+  ResetPasswordFormData,
+  ResetPasswordFormSchema,
+} from "../schemas/ResetPasswordFormSchema";
+import { FormErrorMessage } from "./ui/FormErrorMessage";
+import { FormFields } from "./ui/FormFields";
 
 interface ResetPasswordFormProps {
-  submitResetPasswordForm: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+  otpCode: string;
 }
 
-export function ResetPasswordForm({ submitResetPasswordForm }: ResetPasswordFormProps) {
-  const [activeField, setActiveField] = useState<ActiveFieldResetPasswordType>(null);
+export function ResetPasswordForm({ otpCode }: ResetPasswordFormProps) {
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(ResetPasswordFormSchema),
+  });
+
+  const {
+    error: resetPasswordError,
+    isLoading,
+    submitResetPasswordForm,
+  } = useResetPassword(email, otpCode);
+
+  async function handleSubmitResetPasswordForm(
+    formData: ResetPasswordFormData,
+  ) {
+    const responseData = await submitResetPasswordForm(formData);
+
+    localStorage.setItem("user", JSON.stringify(responseData.user));
+    router.push(`/menu`);
+  }
 
   return (
-    <form onSubmit={submitResetPasswordForm}>
-      <div
-        className={cn(
-          "grid border border-[var(--color-border-light)] border-solid py-[13px] px-[18px] rounded-[10px] h-[69px] transition-all mb-[18px]",
-          activeField === "password" && "border-primary"
-        )}
-      >
-        <label
-          className={cn("text-primary mb-[3px] text-[12px]", activeField !== "password" && "hidden")}
-          htmlFor="password"
-        >
-          Enter your new password
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          placeholder="Enter your new password"
-          className="focus:outline-none text-[14px]"
-          onFocus={() => setActiveField("password")}
-          onBlur={() => setActiveField(null)}
-        />
-      </div>
+    <form onSubmit={handleSubmit(handleSubmitResetPasswordForm)}>
+      <LoadingOverlay
+        isVisible={isSubmitting && isLoading}
+        text="Submit your data..."
+      />
 
-      <div
-        className={cn(
-          "grid border border-[var(--color-border-light)] border-solid py-[13px] px-[18px] rounded-[10px] h-[69px] transition-all mb-[18px]",
-          activeField === "confirmPassword" && "border-primary"
-        )}
-      >
-        <label
-          className={cn("text-primary mb-[3px] text-[12px]", activeField !== "confirmPassword" && "hidden")}
-          htmlFor="confirmPassword"
-        >
-          Confirm your new password
-        </label>
-        <input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          placeholder="Confirm your new password"
-          className="focus:outline-none text-[14px]"
-          onFocus={() => setActiveField("confirmPassword")}
-          onBlur={() => setActiveField(null)}
-        />
-      </div>
+      <FormFields<ResetPasswordFormData>
+        fields={RESET_PASSWORD_FORM_FIELDS}
+        register={register}
+        errors={errors}
+      />
 
-      <CustomButton className="py-[20px] absolute bottom-[32px] left-[25px] right-[25px]" type="submit">
+      {resetPasswordError && (
+        <FormErrorMessage>{resetPasswordError}</FormErrorMessage>
+      )}
+
+      <CustomButton
+        className="py-[20px] absolute bottom-[32px] left-[25px] right-[25px]"
+        type="submit"
+      >
         Reset Password
       </CustomButton>
     </form>

@@ -1,30 +1,35 @@
-import { FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
+import { ForgotPasswordFormSchemaData } from "../schemas/ForgotPasswordFormSchema";
 import { forgotPasswordApi } from "../services/forgotPassword.api";
 
-export function useForgotPassword() {
-  const router = useRouter();
+export function useForgotPassword(): {
+  error: string | null;
+  isLoading: boolean;
+  submitForgotPasswordForm: (data: ForgotPasswordFormSchemaData) => void;
+} {
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  async function submitForgotPasswordForm(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email");
+  async function submitForgotPasswordForm(data: ForgotPasswordFormSchemaData) {
+    setError(null);
+    setIsLoading(true);
+    const { email } = data;
 
     try {
-      const res = await forgotPasswordApi(email as string);
+      const res = await forgotPasswordApi(email);
+      const data = await res.json();
 
       if (!res.ok) {
-        throw new Error("Failed to send forgot password request");
+        throw new Error(data.message);
       }
-
-      await res.json();
-      router.push(`/auth/reset-password?email=${email}`);
     } catch (error) {
       console.error("Error sending forgot password request:", error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
-  return { submitForgotPasswordForm };
+  return { error, isLoading, submitForgotPasswordForm };
 }

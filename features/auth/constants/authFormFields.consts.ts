@@ -1,4 +1,6 @@
-export const FIELDS = [
+import { BaseFormField } from "../types/ BaseFormField.type";
+
+export const AUTH_FORM_FIELDS: BaseFormField[] = [
   {
     id: "email",
     name: "email",
