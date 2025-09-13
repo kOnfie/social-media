@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     }
 
     const result = await query(
-      "SELECT id, email, password_hash, email_verified FROM users WHERE email = $1",
+      "SELECT id, email, name, password_hash, email_verified FROM users WHERE email = $1",
       [body.email],
     );
     if (result.rowCount === null || result.rowCount === 0) {

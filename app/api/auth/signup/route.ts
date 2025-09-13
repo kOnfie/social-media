@@ -7,6 +7,7 @@ import { generateJwtToken } from "@/lib/server/jwt";
 import { sendingOTPEmailAndStoringInDB } from "@/lib/server/sendingOTPEmailAndStoringInDB";
 
 interface SignupBody {
+  name: string;
   email: string;
   password: string;
 }
@@ -15,9 +16,9 @@ export async function POST(req: NextRequest) {
   const body: SignupBody = await req.json();
 
   try {
-    if (!body.email || !body.password) {
+    if (!body.email || !body.password || !body.name) {
       return NextResponse.json(
-        { message: "Email and password are required" },
+        { message: "Email, password and name are required" },
         { status: 400 },
       );
     }
@@ -35,8 +36,8 @@ export async function POST(req: NextRequest) {
     const passwordHash = await hashPassword(body.password);
 
     const result = await query(
-      "INSERT INTO users (email, password_hash) VALUES($1, $2) RETURNING id, email, email_verified",
-      [body.email, passwordHash],
+      "INSERT INTO users (email, password_hash, name) VALUES($1, $2, $3) RETURNING id, email, email_verified, name",
+      [body.email, passwordHash, body.name],
     );
     const newUser = result.rows[0];
 

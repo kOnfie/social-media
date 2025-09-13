@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Facebook } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import { cn } from "@/lib/client/utils";
@@ -83,15 +82,6 @@ export function SigninForm({ className }: SigninFormProps) {
         >
           <Image src={googleIcon.src} alt="Google" width={14} height={14} />
           Sign in with Google
-        </CustomButton>
-
-        <CustomButton
-          type="button"
-          className="flex items-center justify-center gap-[8px] py-[17.5px]"
-          variant="outline"
-        >
-          <Facebook size={14} />
-          Sign in with Facebook
         </CustomButton>
       </div>
 

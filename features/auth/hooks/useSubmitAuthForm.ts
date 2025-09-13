@@ -18,10 +18,10 @@ export function useSubmitAuthForm(variant: "signin" | "signup"): {
     setError(null);
     setIsLoading(true);
 
-    const { email, password } = data;
+    const { email, password, name } = data;
 
     try {
-      const res = await submitAuthFormApi({ email, password }, variant);
+      const res = await submitAuthFormApi({ email, password, name }, variant);
       const data = await res.json();
 
       if (!res.ok) {
@@ -40,3 +40,4 @@ export function useSubmitAuthForm(variant: "signin" | "signup"): {
 
   return { error, isLoading, submitAuthForm };
 }
+  

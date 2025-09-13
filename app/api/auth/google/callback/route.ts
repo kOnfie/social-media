@@ -52,6 +52,8 @@ export async function GET(req: NextRequest) {
     }
 
     const newUser = result.rows[0];
+    console.log("newUser:", newUser);
+
     const token = generateJwtToken({
       id: newUser.id,
       email: newUser.email,
