@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     if (existingUser.rowCount !== null && existingUser.rowCount > 0) {
       return NextResponse.json(
         { message: "Invalid email or password" },
-        { status: 409 },
+        { status: 401 },
       );
     }
 

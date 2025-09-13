@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 
-import { Container } from "@/components/Container";
+import { Container } from "@/shared/components/Container";
 
 export const metadata: Metadata = {
   title: "Notification page | Social Media Platform",

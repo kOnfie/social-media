@@ -16,6 +16,7 @@ import { SeparatorWithText } from "@/shared/components/ui/SeparatorWithText";
 import { AUTH_FORM_FIELDS } from "../constants/authFormFields.consts";
 import { useSubmitAuthForm } from "../hooks/useSubmitAuthForm";
 import { AuthFormSchema, AuthFormSchemaData } from "../schemas/AuthFormSchema";
+import { redirectToGoogleAuth } from "../utils/redirectToGoogleAuth.utils";
 import { FormErrorMessage } from "./ui/FormErrorMessage";
 import { FormFields } from "./ui/FormFields";
 
@@ -78,6 +79,7 @@ export function SigninForm({ className }: SigninFormProps) {
           type="button"
           className="flex items-center justify-center gap-[8px] py-[17.5px]"
           variant="outline"
+          onClick={redirectToGoogleAuth}
         >
           <Image src={googleIcon.src} alt="Google" width={14} height={14} />
           Sign in with Google

@@ -4,11 +4,11 @@ import Link from "next/link";
 import { CustomButton } from "@/shared/components/ui/CustomButton";
 
 export const metadata: Metadata = {
-  title: "Not found",
-  description: "Page not found :(. 404",
+  title: "Authentication Error",
+  description: "Authentication Error page",
 };
 
-export default function NotFound() {
+export default function AuthErrorPage() {
   return (
     <div className="min-h-[80vh] flex flex-col justify-center items-center px-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg border border-border p-8 text-center space-y-6">
@@ -25,7 +25,7 @@ export default function NotFound() {
             viewBox="0 0 24 24"
           >
             <path
-              d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              d="M6 18L18 6M6 6l12 12"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -35,13 +35,14 @@ export default function NotFound() {
           className="text-3xl font-bold text-primary mb-2"
           style={{ color: "var(--color-primary)" }}
         >
-          Page not found
+          Authentication error
         </h1>
         <p
           className="text-md text-text-secondary mb-10"
           style={{ color: "var(--color-text-secondary)" }}
         >
-          You may have entered an invalid address or the page has been deleted.
+          Authorization session has expired or is invalid. Please try logging in
+          again.
         </p>
 
         <CustomButton asChild className="w-full py-3 px-10">

@@ -16,6 +16,7 @@ import { SeparatorWithText } from "@/shared/components/ui/SeparatorWithText";
 import { AUTH_FORM_FIELDS } from "../constants/authFormFields.consts";
 import { useSubmitAuthForm } from "../hooks/useSubmitAuthForm";
 import { AuthFormSchema, AuthFormSchemaData } from "../schemas/AuthFormSchema";
+import { redirectToGoogleAuth } from "../utils/redirectToGoogleAuth.utils";
 import { FormErrorMessage } from "./ui/FormErrorMessage";
 import { FormFields } from "./ui/FormFields";
 
@@ -45,8 +46,11 @@ export function SignupForm({ className }: SignupFormProps) {
         isVisible={isSubmitting || isLoading}
         text="Submitting your data..."
       />
+
       {submitAuthFormError && (
-        <FormErrorMessage>{submitAuthFormError}</FormErrorMessage>
+        <FormErrorMessage className="text-[20px] uppercase mb-3">
+          {submitAuthFormError}
+        </FormErrorMessage>
       )}
 
       <FormFields<AuthFormSchemaData>
@@ -68,6 +72,7 @@ export function SignupForm({ className }: SignupFormProps) {
           type="button"
           className="flex items-center justify-center gap-[8px] py-[17.5px]"
           variant="outline"
+          onClick={redirectToGoogleAuth}
         >
           <Image src={googleIcon.src} alt="Google" width={14} height={14} />
           Sign up with Google
