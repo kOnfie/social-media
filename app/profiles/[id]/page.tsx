@@ -1,8 +1,8 @@
-import { Statistics } from "@/components/Statistic";
-
-import { CustomButton } from "@/components/ui/CustomButton";
-import { FollowButton } from "@/components/ui/FollowButton";
 import { MessageSquareMore } from "lucide-react";
+
+import { Statistics } from "@/shared/components/Statistic";
+import { CustomButton } from "@/shared/components/ui/CustomButton";
+import { FollowButton } from "@/shared/components/ui/FollowButton";
 
 interface ProfilePageProps {
   params: { id: string };
@@ -32,12 +32,19 @@ export default function ProfilePage({ params }: ProfilePageProps) {
         <div className="m-auto w-[110px] h-[110px] bg-black rounded-[50%] mb-[18px]" />
 
         <h6 className="text-[14px] font-medium mb-[9px]">Tom Cruise</h6>
-        <p className="text-[12px] text-[var(--color-text-secondary)]">@tomcruise</p>
+        <p className="text-[12px] text-[var(--color-text-secondary)]">
+          @tomcruise
+        </p>
 
         <div className="flex items-center justify-center gap-[14px] mt-[28px] mb-[32px]">
-          <CustomButton variant="outline" className="flex items-center gap-2 py-[10px] px-[21px] rounded-[50px]">
+          <CustomButton
+            variant="outline"
+            className="flex items-center gap-2 py-[10px] px-[21px] rounded-[50px]"
+          >
             <MessageSquareMore size={18} />
-            <p className="text-[12px] text-[var(--color-text-secondary)]">Message</p>
+            <p className="text-[12px] text-[var(--color-text-secondary)]">
+              Message
+            </p>
           </CustomButton>
 
           <FollowButton isFollowing={false} />

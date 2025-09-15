@@ -14,10 +14,16 @@
 
   /* gradients */
   --background-primary-gradient: linear-gradient(135deg, #4dd969, #28cd56);
-  --background-primary-gradient-hover: linear-gradient(135deg, #45c961, #23b84f);
+  --background-primary-gradient-hover: linear-gradient(
+    135deg,
+    #45c961,
+    #23b84f
+  );
 
   --color-green-light: var(--color-green-light);
   --color-green-light-hover: var(--color-green-light-hover);
+
+  --color-error: var(--color-error);
 }
 
 :root {
@@ -38,6 +44,8 @@
 
   /* BORDER */
   --color-border-light: #eeeeee;
+
+  --color-error: #ff0000;
 }
 
 .dark {
@@ -57,6 +65,8 @@
 
   /* BORDER */
   --color-border-light: #eeeeee;
+
+  --color-error: #ff0000;
 }
 
 @layer base {

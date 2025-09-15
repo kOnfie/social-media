@@ -1,6 +1,7 @@
-import { Container } from "@/components/Container";
 import { Metadata } from "next";
 import Link from "next/link";
+
+import { Container } from "@/shared/components/Container";
 
 export const metadata: Metadata = {
   title: "Notification page | Social Media Platform",
@@ -105,9 +106,14 @@ export default function NotificationPage() {
 
               <div>
                 <p className="text-[12px] font-medium">
-                  {name} <span className="font-normal text-[var(--color-text-secondary)]">{action}</span>
+                  {name}{" "}
+                  <span className="font-normal text-[var(--color-text-secondary)]">
+                    {action}
+                  </span>
                 </p>
-                <p className="text-[11px] text-[var(--color-text-secondary)]">2 h ago</p>
+                <p className="text-[11px] text-[var(--color-text-secondary)]">
+                  2 h ago
+                </p>
               </div>
             </Link>
           ))}

@@ -1,5 +1,6 @@
-import { Metadata } from "next";
 import { ReactNode } from "react";
+
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Profile of Tom Cruise | Social Media Platform",
