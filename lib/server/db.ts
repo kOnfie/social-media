@@ -1,4 +1,4 @@
-import { Pool, Query, QueryResult, QueryResultRow } from "pg";
+import { Pool, QueryResult, QueryResultRow } from "pg";
 
 interface DatabaseConfig {
   user?: string;
@@ -18,7 +18,7 @@ declare global {
   var pgPool: Pool | undefined;
 }
 
-let pool: Pool;
+export let pgPool: Pool;
 
 if (!globalThis.pgPool) {
   const config: DatabaseConfig = {
@@ -34,18 +34,18 @@ if (!globalThis.pgPool) {
   };
 
   globalThis.pgPool = new Pool(config);
+} else {
+  pgPool = globalThis.pgPool;
 }
-
-pool = globalThis.pgPool;
 
 export async function query<T extends QueryResultRow = any>(
   text: string,
-  params?: QueryParams
+  params?: QueryParams,
 ): Promise<QueryResult<T>> {
   const start = Date.now();
 
   try {
-    const res = await pool.query<T>(text, params);
+    const res = await pgPool.query<T>(text, params);
     const duration = Date.now() - start;
 
     console.log("executed query", {
@@ -60,5 +60,3 @@ export async function query<T extends QueryResultRow = any>(
     throw error;
   }
 }
-
-export default pool;

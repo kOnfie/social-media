@@ -4,10 +4,6 @@ import { Statistics } from "@/shared/components/Statistic";
 import { CustomButton } from "@/shared/components/ui/CustomButton";
 import { FollowButton } from "@/shared/components/ui/FollowButton";
 
-interface ProfilePageProps {
-  params: { id: string };
-}
-
 const STATISTICS = [
   {
     name: "Post",
@@ -23,9 +19,7 @@ const STATISTICS = [
   },
 ];
 
-export default function ProfilePage({ params }: ProfilePageProps) {
-  const profileId = params.id;
-
+export default function ProfilePage() {
   return (
     <main className="pt-[108px]">
       <section className="m-auto text-center">

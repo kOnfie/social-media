@@ -39,7 +39,7 @@ export function useOTP(otpLength: number) {
     e: KeyboardEvent<HTMLInputElement>,
     index: number,
   ): void {
-    if (e.key === "Backspace" && !e.target.value && index > 0) {
+    if (e.key === "Backspace" && index > 0) {
       focusOnInput(refArr, index - 1);
     }
   }

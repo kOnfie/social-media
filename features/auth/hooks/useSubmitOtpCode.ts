@@ -20,7 +20,7 @@ export function useSubmitOtpCode(code: string) {
       }
 
       return data;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       setError(error.message);
     } finally {

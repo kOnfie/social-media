@@ -28,6 +28,11 @@ export async function GET(req: NextRequest) {
 
     const tokens = await tokenResponse.json();
 
+    if (!tokens || tokens.error) {
+      console.error("Error obtaining tokens:", tokens.error);
+      return NextResponse.redirect(new URL("/auth/error", req.url));
+    }
+
     const userResponse = await fetch(
       "https://www.googleapis.com/oauth2/v2/userinfo",
       {
@@ -35,7 +40,17 @@ export async function GET(req: NextRequest) {
       },
     );
 
+    if (!userResponse.ok) {
+      console.error("Failed to fetch user info:", await userResponse.text());
+      return NextResponse.redirect(new URL("/auth/error", req.url));
+    }
+
     const googleUser = await userResponse.json();
+
+    if(!googleUser.email) {
+      console.error("Failed to get user email. Try to do auth again");
+      return NextResponse.redirect(new URL("/auth/error", req.url));
+    }
 
     const result = await query(
       "INSERT INTO users (name, email, email_verified, picture) VALUES($1, $2, $3, $4) ON CONFLICT (email) DO UPDATE SET name = $1, email_verified = $3, picture = $4 RETURNING *",

@@ -24,7 +24,7 @@ export function useResetPassword(email: string | null, code: string) {
       }
 
       return data;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error sending reset password request:", error);
       setError(error.message);
     } finally {

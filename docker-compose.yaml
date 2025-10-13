@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:13
+    image: postgres
     container_name: social_media_postgres
     restart: always
     environment:
