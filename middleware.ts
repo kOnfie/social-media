@@ -36,7 +36,7 @@ export async function middleware(req: NextRequest) {
     }
 
     return NextResponse.next();
-  } catch (error) {
+  } catch (error: any) {
     console.error("JWT verification failed:", error.message);
     return NextResponse.redirect(absoluteUrl).cookies.delete("token");
   }

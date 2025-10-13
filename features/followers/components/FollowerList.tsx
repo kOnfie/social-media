@@ -1,7 +1,7 @@
 import cn from "classnames";
 import { Container } from "lucide-react";
 
-import { FollowButton } from "@/components/ui/FollowButton";
+import { FollowButton } from "@/shared/components/ui/FollowButton";
 
 import { FOLLOWERS } from "../constants/followerList.const";
 

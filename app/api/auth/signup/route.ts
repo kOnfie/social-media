@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
         headers: { "Set-Cookie": cookie },
       },
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating user:", error);
     return NextResponse.json(
       { message: `Error creating user: ${error.message}` },

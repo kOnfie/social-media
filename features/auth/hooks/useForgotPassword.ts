@@ -23,7 +23,7 @@ export function useForgotPassword(): {
       if (!res.ok) {
         throw new Error(data.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error sending forgot password request:", error);
       setError(error.message);
     } finally {
